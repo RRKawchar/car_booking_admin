@@ -2,19 +2,17 @@ import 'package:car_booking_admin/admin/model/bookin_list_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class HomeProvider with ChangeNotifier{
+class HomeProvider with ChangeNotifier {
+  List<BookingListModel> bookingList = [];
 
-  List<BookingListModel> bookingList=[];
-
-  bool isLoading=false;
+  bool isLoading = false;
 
   Future<void> fetchUsersData() async {
     try {
-
-      isLoading=true;
+      isLoading = true;
       notifyListeners();
       final QuerySnapshot usersSnapshot =
-      await FirebaseFirestore.instance.collection('PassengerBooking').get();
+          await FirebaseFirestore.instance.collection('PassengerBooking').get();
 
       if (usersSnapshot.docs.isNotEmpty) {
         bookingList.clear();
@@ -25,11 +23,20 @@ class HomeProvider with ChangeNotifier{
           final userId = userDoc.id;
           final userName = userData['name'];
           final userEmail = userData['email'];
-          final date=userData['date'];
-          final pickUpLocation=userData['pickLocation'];
-          final dropLocation=userData['dropLocation'];
+          final date = userData['date'];
+          final pickUpLocation = userData['pickLocation'];
+          final dropLocation = userData['dropLocation'];
+          final deviceToken = userData['deviceTokens'];
 
-          final bookingData=BookingListModel(userId: userId, userName: userName, email: userEmail, date: date, pickUpLocation: pickUpLocation, dropLocation: dropLocation,);
+          final bookingData = BookingListModel(
+            userId: userId,
+            userName: userName,
+            email: userEmail,
+            date: date,
+            pickUpLocation: pickUpLocation,
+            dropLocation: dropLocation,
+            deviceToken: deviceToken,
+          );
           bookingList.add(bookingData);
           print(bookingList);
         }
@@ -39,8 +46,8 @@ class HomeProvider with ChangeNotifier{
       }
     } catch (e) {
       print('Error fetching user data: $e');
-    }finally{
-      isLoading=false;
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

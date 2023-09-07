@@ -1,10 +1,12 @@
 import 'package:car_booking_admin/admin/components/custom_textfield.dart';
-import 'package:car_booking_admin/admin/firebase_service/auth_service.dart';
+import 'package:car_booking_admin/admin/firebase_helper/auth_service.dart';
 import 'package:car_booking_admin/admin/provider/location_provider.dart';
 import 'package:car_booking_admin/admin/screen/auth/sign_up_screen.dart';
+import 'package:car_booking_admin/admin/service/notification_service.dart';
 import 'package:car_booking_admin/admin/utils/helper_class.dart';
 import 'package:car_booking_admin/admin/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,11 +20,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  NotificationServices notificationServices=NotificationServices();
+
 
   @override
   void initState() {
     final provider = Provider.of<LocationProvider>(context, listen: false);
-    provider.getLocation(context);
+    if (mounted) {
+      SchedulerBinding.instance.addPostFrameCallback((_){
+        provider.getLocation(context);
+      });
+    }
     super.initState();
   }
 
@@ -82,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     email: emailController.text,
                     password: passwordController.text,
                   );
+                  notificationServices.getDeviceToken();
                 } else {
                   kShowWaringMessage(
                     context: context,

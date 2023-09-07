@@ -3,6 +3,7 @@ class BookingListModel {
   final String userName;
   final String email;
   final String date;
+  final String deviceToken;
   final String pickUpLocation;
   final String dropLocation;
 
@@ -13,5 +14,6 @@ class BookingListModel {
     required this.date,
     required this.pickUpLocation,
     required this.dropLocation,
+    required this.deviceToken,
   });
 }

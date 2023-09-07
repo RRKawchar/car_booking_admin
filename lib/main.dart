@@ -3,13 +3,20 @@ import 'package:car_booking_admin/admin/provider/location_provider.dart';
 import 'package:car_booking_admin/admin/provider/main_provider.dart';
 import 'package:car_booking_admin/admin/screen/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await Firebase.initializeApp();
   runApp(const MyApp());
+}
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A Background message just showed up :  ${message.notification!.body}');
 }
 
 class MyApp extends StatelessWidget {

@@ -1,7 +1,8 @@
 import 'package:car_booking_admin/admin/components/custom_textfield.dart';
-import 'package:car_booking_admin/admin/firebase_service/auth_service.dart';
+import 'package:car_booking_admin/admin/firebase_helper/auth_service.dart';
 import 'package:car_booking_admin/admin/provider/location_provider.dart';
 import 'package:car_booking_admin/admin/screen/auth/login_screen.dart';
+import 'package:car_booking_admin/admin/service/notification_service.dart';
 import 'package:car_booking_admin/admin/utils/helper_class.dart';
 import 'package:car_booking_admin/admin/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-
+NotificationServices notificationServices = NotificationServices();
 
 
   @override
@@ -102,6 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     email: emailController.text,
                     password: passwordController.text,
                   );
+                  notificationServices.getDeviceToken();
                 } else {
                   kShowWaringMessage(
                     context: context,
